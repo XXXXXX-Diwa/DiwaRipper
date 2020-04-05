@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="DiwaRipper" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/DiwaRipper" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="D:/MinGW/lib/libpthreadGC2.a" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/DiwaRipper" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="D:/MinGW/lib/libpthreadGC2.a" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Linker>
+			<Add library="D:/MinGW/lib/WinMM.Lib" />
+		</Linker>
+		<Unit filename="MultAndDrum.cpp" />
+		<Unit filename="MultAndDrum.h" />
+		<Unit filename="RomToRom.cpp" />
+		<Unit filename="RomToRom.h" />
+		<Unit filename="copyDatSize.cpp" />
+		<Unit filename="copyDatSize.h" />
+		<Unit filename="crc32.cpp" />
+		<Unit filename="crc32.h" />
+		<Unit filename="getDat.cpp" />
+		<Unit filename="getDat.h" />
+		<Unit filename="importOft.cpp" />
+		<Unit filename="importOft.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="main.h" />
+		<Unit filename="playSample.cpp" />
+		<Unit filename="playSample.h" />
+		<Unit filename="romSwap.cpp" />
+		<Unit filename="romSwap.h" />
+		<Unit filename="romtoAsm.cpp" />
+		<Unit filename="romtoAsm.h" />
+		<Unit filename="showDat.cpp" />
+		<Unit filename="showDat.h" />
+		<Unit filename="showSam.cpp" />
+		<Unit filename="showSam.h" />
+		<Unit filename="showTra.cpp" />
+		<Unit filename="showTra.h" />
+		<Unit filename="subTabSrh.cpp" />
+		<Unit filename="subTabSrh.h" />
+		<Unit filename="subTrackInfoGet.cpp" />
+		<Unit filename="subTrackInfoGet.h" />
+		<Unit filename="tabSearch.cpp" />
+		<Unit filename="tabSearch.h" />
+		<Unit filename="writeToRom.cpp" />
+		<Unit filename="writeToRom.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
