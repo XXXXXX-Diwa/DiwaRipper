@@ -1,8 +1,16 @@
-Ŀǰ������: 
+目前的问题: 
 21:43 2020/4/5
 
-1.Table��ַ���������ϸ�,�����޷������������Ե�Table��ַ
+1.Table地址搜索过于严格,导致无法搜索到不明显的Table地址
 
-2.multi samples��drum part����Voice Group�ļ�λ����δ����
+2.multi samples和drum part两种Voice Group的键位数据未完善 (已解决,代码未更新)
 
-3.���ĵĴ�ӡASM�����Ĺ�����δ����
+3.核心的打印ASM补丁的功能仍未完善
+
+17:56 2020/4/8
+新发现问题:
+4.rom head数据名如果有多个连续00,则会导致search.oft存储的table地址无法被读取
+
+5.当前的数据顺序,在sappy上可以播放,但是实机会错误
+
+6.即使是sappy上,也并未完全模拟,导入数据仍有问题.
