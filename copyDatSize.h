@@ -3,7 +3,7 @@
 #include <vector>
 #include <cstdint>
 
-uint32_t calculateCopySize(int samFlag,int cpyTol);
+uint32_t calculateCopySize(int samFlag,uint32_t cpyTol);
 
 struct samplehead
 {

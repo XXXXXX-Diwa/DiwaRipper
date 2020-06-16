@@ -32,9 +32,9 @@ int MakeWav(int fren,int chunk,int datsize)
 
         int temp;
         uint8_t bit8;
-        if(datsize>0x40000)
+        if(datsize>0x400000)
         {
-            printf("样本数据尺寸异常!");
+            printf("abnormal size!");
             delete(wav);
             return 0;
         }

@@ -124,7 +124,7 @@ int trackShow(int num)
         int c;
         int n=tabgop[num-1]-1;
 //        int trasize;
-        printf("歌曲%d的详细信息:                     [空格返回]\n",n+1);
+        printf("歌曲%d的详细信息:                     ESC [返回]\n",n+1);
         printf("\nHEAD地址: %X  VoiceGroup: %X  轨道数: %d\n",headoft[n],voigop[n],tranum[n]);
         printf("\n轨号   起始地址    乐器\t\t\t\t\t [SIZE]\n");
         g_ipf=fopen(g_ipfName.c_str(),"rb");
@@ -156,7 +156,7 @@ int trackShow(int num)
         }
         fclose(g_ipf);
 //        while(clean=getch()!='\n'&&clean!=EOF);
-        while(getch()!=' ');
+        while(getch()!=27);
 
     return 1;
 }
@@ -247,6 +247,7 @@ int headate()
             }
 
             sscanf(&temp[0],"%d",&nu);
+            fflush(stdin);
             if(nu>0&&nu<=tabgoptotal)
                 return trackShow(nu);
             else
@@ -293,8 +294,8 @@ int tableInfo()
     tabstart=0;
     tabend=0;
     memset(tabgop,0,sizeof(int)*2000);
-    while(_kbhit()) getch();
-    printf("\n请选择:\t\t\t\t\t\t[空格返回]\n");
+    fflush(stdin);
+    printf("\n请选择:\t\t\t\t\t\tESC [返回]\n");
     printf("\n\tS.设置查看的曲子音轨数限制(1-9)--<%d>\n",tralimit);
     printf(
            "\n\tA.按曲号?至曲号?查看曲子详细信\n"
@@ -347,7 +348,7 @@ int tableInfo()
                 if(tabgoptotal==0)
                 {
                     printf("范围中没有有效或符合音轨数的歌曲!");
-                    while((clean=getchar())!='\n'&&clean!=EOF);
+                    fflush(stdin);
                     getchar();
                     continue;
                 }
@@ -357,8 +358,7 @@ int tableInfo()
             else
             {
                 printf("\n输入错误!");
-
-                while((clean=getchar())!='\n'&&clean!=EOF);
+                fflush(stdin);
                 getchar();
             }
 
@@ -403,15 +403,13 @@ int tableInfo()
             else if(a<1||a>voitotal)
             {
                 printf("输入的序号不在VoiceGroup号范围内!\n");
-
-                while((clean=getchar())!='\n'&&clean!=EOF);
+                fflush(stdin);
                 getchar();
             }
             else if(voitabNum[a-1]==0)
             {
                 printf("你选择的VoiceGroup号歌曲数为0!\n");
-
-                while((clean=getchar())!='\n'&&clean!=EOF);
+                fflush(stdin);
                 getchar();
             }
 
@@ -425,7 +423,7 @@ int tableInfo()
         return 1;
 
         break;
-    case ' ':
+    case 27:
         return 0;
     }
     return 1;

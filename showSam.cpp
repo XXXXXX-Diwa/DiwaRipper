@@ -875,14 +875,14 @@ int VoiGopInfo()
 //            char clean;
 //            while(clean=getchar()!='\n'&&clean!=EOF);
         printf("\t\t   VoiceGroup列表(序号-地址-曲数)\t\t(任意非数返回)\n");
-        for(int v=0;v<voitotal;v++)
+        for(uint32_t v=0;v<voitotal;v++)
         {
             if(v%4==0) printf("\n");
             printf("   %02d %X  %04d",v+1,voiceoft[v+1],voitabNum[v]);
 
         }
         printf("\n\n请输入要查看样本的VoiceGroup序号: ");
-        int num=0,b=0;
+        uint32_t num=0,b=0;
         if((b=scanf("%d",&num))==1&&num>0&&
             num<=voitotal&&voitabNum[num-1]!=0)
         {
@@ -900,9 +900,10 @@ int VoiGopInfo()
 //                printf("%08X\n",(int)ftell(g_ipf));
                 fread(&vtda[i],12,1,g_ipf);
 //                printf("%X\n",vtda[i].tdat1);
-//                printf("%X\n",vtda[i].tdat1<<24);
-//                printf("%X\n",vtda[i].tdat1<<24>>24);
-//                printf("%X\n",vtda[i].tdat1<<24>>24&0x40);
+//                printf("%X\n",vtda[i].tdat1>>16);
+//                printf("%X\n",vtda[i].tdat2>>25<<1);
+//                printf("i=%d\n",i);
+//                getchar();
                 if(vtda[i].tdat1<<24>>24==0x40&&
                    vtda[i].tdat1>>16==0&&
                    vtda[i].tdat2>>25<<1==8&&vtda[i].tdat3>>25<<1==8)
@@ -918,6 +919,8 @@ int VoiGopInfo()
                 {
                     typecount[6]++;
 //                    printf("%X\n",vtda[i].tdat1<<24>>24&0x80);
+//                    fflush(stdin);
+//                    getchar();
                     continue;
 
                 }
@@ -941,9 +944,9 @@ int VoiGopInfo()
                                 typecount[3]++;
                     else if(vtda[i].tdat1<<29>>29==4&&
                             vtda[i].tdat1>>16==0&&
-                            vtda[i].tdat2<<24>>24<2)
+                            vtda[i].tdat2<<24>>24<=2)/**某hack不标准的为2,实际只能为0或1*/
                                 typecount[4]++;
-                    else break;
+
                 }
 
             }
@@ -961,20 +964,17 @@ int VoiGopInfo()
             fclose(g_ipf);
 
             return 1;
-
-
         }
         else if(b==0)
         {
-            while((clean=getchar())!='\n'&&clean!=EOF);
+            fflush(stdin);
             return 0;
         }
 
         else if(num<1||num>voitotal)
         {
             printf("输入的序号不在VoiceGroup号范围内!\n");
-
-            while((clean=getchar())!='\n'&&clean!=EOF);
+            fflush(stdin);
             getchar();
         }
 

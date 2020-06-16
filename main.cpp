@@ -22,6 +22,7 @@ int main(int argc,char** argv)
     if(argc>2) g_subRom=argv[2];
 
     tabGet(g_ipfName);
+
     getData(tabOffset,g_ipfName);
 
     while(importinterface());

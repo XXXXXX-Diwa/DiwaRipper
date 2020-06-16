@@ -47,7 +47,8 @@ uint32_t getimportOft(uint32_t datSiz)
             }
             temoft=&temoft[2];//去掉前两位
             sscanf(&temoft[0],"%x",&oft);
-            oft=oft+4-oft%4;//对齐为4的整数
+            if(oft%4!=0)
+                oft=oft+4-oft%4;//对齐为4的整数
             if(oft+datSiz>0x1FFFFFF)
             {
                 printf("写入数据将会超过最大容量!是否重新选择--(Y\\N)  ");
@@ -117,6 +118,7 @@ uint32_t getimportOft(uint32_t datSiz)
             if(oft+datSiz>0x1FFFFFF)
             {
                 printf("既没有找到足够的空白数据!rom尺寸也不支持继续增加了!");
+                printf("\n写入坐标为: %X 写入尺寸为: %X 需要ROM大小为: %X",oft,datSiz,oft+datSiz);
                 getchar();
                 exit(1);
             }
@@ -130,6 +132,8 @@ uint32_t getimportOft(uint32_t datSiz)
             oft=oft-temcout*16;
             fseek(g_ipf,oft-16,0);//检查是否有浪费的空白数据
             blankFlag=(blankFlag>>24)+(blankFlag>>24<<8)+(blankFlag>>24<<16)+(blankFlag>>24<<24);
+//            printf("blankFlag的值为: %X",blankFlag);
+//            getchar();
             fread(&usearch,16,1,g_ipf);
             if(usearch.loop==blankFlag)
                 oft-=12;

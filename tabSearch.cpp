@@ -39,37 +39,40 @@ string getExtension(string s)
 uint32_t offsetGet(char* tabDat)
 {
     uint32_t offset=0;
-    for(int g=2;g>=0;g--)
+    for(int g=3;g>=0;g--)
     {
         offset+=(uint8_t)tabDat[g];
         if(g!=0) offset=offset<<8;
-
     }
-    return offset;
+    return offset<<5>>5;
 }
 
 int oldTabChk(uint32_t toft)//检查旧的table记录是否是正确的table
 {
     fseek(g_ipf,toft,0);//定位到table
-    fread(&offset32,3,1,g_ipf);//读取table的head地址
+    fread(&offset32,4,1,g_ipf);//读取table的head地址
+    offset32=offset32<<5>>5;//去掉08
     fseek(g_ipf,offset32,0);//定位到head
+
     int c;
     fread(&c,4,1,g_ipf);//读取音轨信息
     if(feof(g_ipf)!=0) return 0;//如果已经是文件末位
-    c=c<<16>>16;        //仅保留音轨数
+    c=c<<24>>24;        //仅保留音轨数
+
     if(c>0x10||c<=0) return 0;//音轨数不对返回0
     fread(headData,1,(c+1)*4,g_ipf);//读取voicegb和track的地址
+
     for(int h=3;h<(c+1)*4;h+=4)
     {
-        if(headData[h]!=8) return 0;//检查是否都是地址
+        if(headData[h]>>1<<1!=8) return 0;//检查是否都是地址
     }
 
     for(int j=1;j<=c;j++)
     {
         int z=0;
+
         fseek(g_ipf,offsetGet(headData+j*4),0);//检测每个音轨的头数据
         z =fgetc(g_ipf);
-
 
         if(z!=0xBC&&z!=0xBE) return 0;//BE是罕见的情况
     }
@@ -82,15 +85,15 @@ int srhChoose()
     string offset="";
     int tras=1;//默认要搜索的音轨数
     printf(
-           "当前载入的主ROM为: %s\n",getRomName(g_ipfName).c_str());
+           "当前主ROM为: %s\n",getRomName(g_ipfName).c_str());
     printf(
            "\n请选择:\n"
-           "\n\tA.正常的Table地址搜索\n"
-           "\n\tB.手动输入Table地址\n"
-           "\n\tC.搜索合适音轨数的Table地址\n"
-           "\n\tD.从ROM中间开始搜索\n"
-           "\n\tE.深度搜索(适合非标准ROM)\n"
-           "\n\t回车:记录的Table地址"
+           "\n\t\tA.正常的Table地址搜索\n"
+           "\n\t\tB.手动输入Table地址\n"
+           "\n\t\tC.搜索合适音轨数的Table地址\n"
+           "\n\t\tD.从ROM中间开始搜索\n"
+           "\n\t\tE.深度搜索(适合非标准ROM)\n"
+           "\n\t\t回车:记录的Table地址"
            );
     if(srhFst==0) printf("(无记录)\n");
     else printf("(0x%X)\n",srhFst);
@@ -111,6 +114,7 @@ int srhChoose()
 
             tabset.resize(10);
             scanf("%s",&tabset[0]);
+            fflush(stdin);
             if(tabset[0]!='0'||tabset[1]!='x'||tabset[2]=='\0')
             {
                 system("cls");
@@ -198,10 +202,15 @@ int headDataCmp()
     {
         for(int ten=0;ten<0x10;ten++)
         {
+//            printf("headData[%d]= %c\n",ten,headData[ten]);
+//            printf("tableData[%d]= %c\n",ten,tableData[ten]);
+//            getchar();
             if(headData[ten]==tableData[ten])
             {
-                if(ten==9) return 1;
+                if(ten==15) return 1;
             }
+
+            else break;
         }
         while(!feof(searchF))
         {
@@ -209,6 +218,10 @@ int headDataCmp()
             if(c=='\n') break;
         }
         fread(tableData,0x10,1,searchF);
+        for(int i=0;i<0x10;i++)
+            if(tableData[i]==0) tableData[i]=32;
+//        puts(tableData);
+//        puts(headData);
     }
     return 0;
 }
@@ -220,14 +233,14 @@ int searchTab(int Lv,int traNum)
         fread(tableData,8,1,g_ipf);
         if(feof(g_ipf)) return 0;
         fseek(g_ipf,Lv,1);
-        if(tableData[3]==8&&tableData[5]==0&&tableData[7]==0)
+        if(tableData[3]>>1<<1==8&&tableData[5]==0&&tableData[7]==0)
         {
-            offset32=offsetGet(tableData);//head地址
-            fseek(searchF,offset32,0);
+            offset32=offsetGet(tableData);//可能的head地址
+            fseek(searchF,offset32,0);//转到head地址处
             int c;
-            fread(&c,4,1,searchF);
+            fread(&c,4,1,searchF);//读取歌曲数量值
             if(feof(searchF)!=0) continue;
-            c=c<<16>>16;
+            c=c<<24>>24;
             if(c>0x10||c<traNum) continue;
 
             fread(headData,1,(c+1)*4,searchF);
@@ -279,6 +292,12 @@ int tabGet(std::string ipfn)
         fread(headData,0x10,1,g_ipf);
         searchF=fopen(oftPath.c_str(),"rt+");//打开文本允许读写
         fread(tableData,0x10,1,searchF);
+        for(int i=0;i<0x10;i++)
+        {
+            if(headData[i]==0) headData[i]=' ';
+            if(tableData[i]==0) tableData[i]=32;
+        }
+
         if(headDataCmp())
         {
             fseek(searchF,1,1);//跳过一个空格
@@ -295,10 +314,7 @@ int tabGet(std::string ipfn)
     while(!srhChoose())
     {
         fseek(g_ipf,0xB0,0);//排除头数据为table的可能性
-        while (_kbhit())//清空缓冲区
-        {
-            getch();
-        }
+        fflush(stdin);
     }
     system("cls");
     fclose(searchF);//;关闭文件流
@@ -306,20 +322,23 @@ int tabGet(std::string ipfn)
     if(tabOffset!=srhFst)
     {
         printf("是否保存Table地址?--(Y\\N)\n");
-        while (_kbhit())//清空缓冲区
-        {
-            getch();
-        }
+        fflush(stdin);
         char c=getch();
         if(toupper(c)=='Y')
         {
             memset(headData,0,0x20);
             memset(tableData,0,0x10);
-            searchF=fopen(oftPath.c_str(),"rt+");
+            searchF=fopen(oftPath.c_str(),"rt+");//打开table记录文件流
             fseek(g_ipf,0xA0,0);//定位到头关键数据
-            fread(headData,0x10,1,g_ipf);//读取Rom中的数据
+            fread(headData,0x10,1,g_ipf);//读取Romhead数据
             fread(tableData,0x10,1,searchF);//读取oft文件中的数据
-            if(headDataCmp())//如果有的话
+            for(int i=0;i<0x10;i++)
+            {
+                if(headData[i]==0) headData[i]=' ';
+                if(tableData[i]==0) tableData[i]=32;
+            }
+
+            if(headDataCmp())//如果之前有记录的话
             {
                 fseek(searchF,1,1);//跳過1個字節
                 string temp;
@@ -337,7 +356,7 @@ int tabGet(std::string ipfn)
                 }
                 fprintf(searchF,"%s\n",temp.c_str());//打印新的table数据
             }
-            else
+            else//如果之前没有记录的话
             {
                 fseek(searchF,0,2);//定位到末尾
                 string temp;

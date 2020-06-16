@@ -16,15 +16,16 @@ int subSrhChoose()
            "当前载入的副ROM为: %s\n",getRomName(g_subRom).c_str());
     printf(
            "\n请选择:\n"
-           "\n\tA.正常的Table地址搜索\n"
-           "\n\tB.手动输入Table地址\n"
-           "\n\tC.搜索合适音轨数的Table地址\n"
-           "\n\tD.从ROM中间开始搜索\n"
-           "\n\tE.深度搜索(适合非标准ROM)\n"
-           "\n\t回车:记录的Table地址"
+           "\n\t\tA.正常的Table地址搜索\n"
+           "\n\t\tB.手动输入Table地址\n"
+           "\n\t\tC.搜索合适音轨数的Table地址\n"
+           "\n\t\tD.从ROM中间开始搜索\n"
+           "\n\t\tE.深度搜索(适合非标准ROM)\n"
+           "\n\t\t回车:记录的Table地址"
            );
     if(srhFst==0) printf("(无记录)\n");
     else printf("(0x%X)\n",srhFst);
+    printf("\n\t\tESC [返回]\n");
 
     switch (toupper(getch()))
     {
@@ -117,6 +118,8 @@ int subSrhChoose()
             }
             subTabOft=srhFst;
             return 1;
+        case 27:
+            return 1;
         default:
             system("cls");
             return 0;
@@ -131,8 +134,9 @@ int subheadDataCmp()
         {
             if(headData[ten]==tableData[ten])
             {
-                if(ten==9) return 1;
+                if(ten==15) return 1;
             }
+            else break;
         }
         while(!feof(searchF))
         {
@@ -140,6 +144,8 @@ int subheadDataCmp()
             if(c=='\n') break;
         }
         fread(tableData,0x10,1,searchF);
+        for(int i=0;i<0x10;i++)
+            if(tableData[i]==0) tableData[i]=32;
     }
     return 0;
 }
@@ -151,14 +157,14 @@ int subSearchTab(int Lv,int traNum)
         fread(tableData,8,1,g_ipf);
         if(feof(g_ipf)) return 0;
         fseek(g_ipf,Lv,1);
-        if(tableData[3]==8&&tableData[5]==0&&tableData[7]==0)
+        if(tableData[3]>>1<<1==8&&tableData[5]==0&&tableData[7]==0)
         {
             offset32=offsetGet(tableData);//head地址
             fseek(searchF,offset32,0);
             int c;
             fread(&c,4,1,searchF);
             if(feof(searchF)!=0) continue;
-            c=c<<16>>16;
+            c=c<<24>>24;
             if(c>0x10||c<traNum) continue;
 
             fread(headData,1,(c+1)*4,searchF);
@@ -196,7 +202,7 @@ int subTabGet(std::string ipfn)
     curOffset=0;
     tableData[16]={};
     headData[72]={};
-    string oftPath=onlyPath(SWpath)+"search.oft";//使oft文件固定在软件目录
+    string oftPath=onlyPath(SWpath)+"search.oft";//oft文件固定在软件目录
 //    printf("%s\n",oftPath.c_str());
     g_ipf=fopen(ipfn.c_str(),"rb");//二进制方式打开文件流
     if(g_ipf==nullptr) exit(1);
@@ -205,7 +211,7 @@ int subTabGet(std::string ipfn)
     {
         printf("ROM的扩展名不符!%s",getExtension(ipfn).c_str());
         fclose(g_ipf);
-        while(clean=getchar()!='\n'&&clean!=EOF);
+        fflush(stdin);
         getchar();
         exit(1);
     }
@@ -221,6 +227,11 @@ int subTabGet(std::string ipfn)
         fread(headData,0x10,1,g_ipf);
         searchF=fopen(oftPath.c_str(),"rt+");//打开文本允许读写
         fread(tableData,0x10,1,searchF);
+        for(int i=0;i<0x10;i++)
+        {
+            if(headData[i]==0) headData[i]=' ';
+            if(tableData[i]==0) tableData[i]=32;
+        }
         if(subheadDataCmp())
         {
             fseek(searchF,1,1);//跳过一个空格
@@ -237,10 +248,7 @@ int subTabGet(std::string ipfn)
     while(!subSrhChoose())
     {
         fseek(g_ipf,0xB0,0);//排除头数据为table的可能性
-        while (_kbhit())//清空缓冲区
-        {
-            getch();
-        }
+        fflush(stdin);
     }
     if(subTabOft==0)
     {
@@ -253,10 +261,7 @@ int subTabGet(std::string ipfn)
     if(subTabOft!=srhFst)
     {
         printf("是否保存Table地址?--(Y\\N)\n");
-        while (_kbhit())//清空缓冲区
-        {
-            getch();
-        }
+        fflush(stdin);
         char c=getch();
         if(toupper(c)=='Y')
         {

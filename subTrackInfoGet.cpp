@@ -4,9 +4,9 @@
 #include <string>
 #include <cstdint>
 
-int subTabTol=0;//副RomTab总数
+uint32_t subTabTol=0;//副RomTab总数
 uint8_t subTabefc[2000]={};//副RomTab有效 标记
-int subEfcTabTol=0;//副Rom有效Tab总数
+uint32_t subEfcTabTol=0;//副Rom有效Tab总数
 
 
 int getSubRomTrackInfo(int fstTabOft,std::string subRomName)
@@ -26,6 +26,7 @@ int getSubRomTrackInfo(int fstTabOft,std::string subRomName)
         subTabTol++;
         fseek(g_ipf,sTInfo.subHeadOft<<5>>5,0);
         fread(&sHInfo,8,1,g_ipf);//读取曲数,未知和voice的部分
+        sHInfo.subTrackNum=sHInfo.subTrackNum<<24>>24;
         if(sHInfo.subTrackNum>16||sHInfo.subTrackNum==0||sHInfo.subVoiceOft>>25<<1!=8)
             continue;//无效的歌曲跳过
         subTabefc[subTabTol-1]=1;

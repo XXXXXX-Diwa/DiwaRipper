@@ -3,10 +3,21 @@
 
 void getData(uint32_t taboft,std::string ifn);
 
+/**优先级处理如下：
+*-在PSG频道上(square 1,square 2,programmable waveform,noise)将播放优先级最高的音符
+*-在直接声道(direct sound channels)上，如果不再有空闲声道，优先级最高的音符将继续播放，而优先级较低的音符将被忽略或静音，以便为优先级较高的音符留出空间。
+*在优先级相等的情况下，音轨(track)号将起作用。较低的音轨总是优先于较高的音轨。
+*/
+
+/**回音反馈（影响所有直接声道）
+*如果设置bit-7，则每当歌曲开始播放时，混响设置都设置为该值，覆盖任何先前的值。
+*如果bit-7清除，则在开始播放歌曲时不会更改任何内容，并且保留以前使用的混响值。
+*/
+
 typedef struct header
 {
-    uint16_t traNum;//歌曲数目
-    uint16_t unknow;//未知数据
+    uint16_t traNum;//歌曲数目 low为数目 high unknow
+    uint16_t unknow;//未知数据 low为优先级 high 为: 回音反馈
     uint32_t voigop;//voice group
     uint32_t trackoft[16];//歌曲地址数组
 }head_t;
@@ -21,9 +32,9 @@ typedef struct table
 
 extern uint8_t samplefc[128];//样本导出flag
 extern uint8_t tralimit;//当前预览音轨限制
-extern int tabtotal;//table总数
-extern int efctabtal;//有效的曲子总数
-extern int voitotal;//voicegroup总数
+extern uint32_t tabtotal;//table总数
+extern uint32_t efctabtal;//有效的曲子总数
+extern uint32_t voitotal;//voicegroup总数
 extern uint32_t voiceoft[100];//voicegroup的地址存储
 
 extern uint32_t headoft[2000];

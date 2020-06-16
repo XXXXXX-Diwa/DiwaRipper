@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1585534971 source:d:\gitdiwa\diwaripper\main.cpp
+1586782241 source:d:\gitdiwa\diwaripper\main.cpp
 	<iostream>
 	"main.h"
 	"tabSearch.h"
@@ -21,7 +21,7 @@
 	<cstring>
 	<cstdint>
 
-1585558967 source:d:\gitdiwa\diwaripper\tabsearch.cpp
+1587714707 source:d:\gitdiwa\diwaripper\tabsearch.cpp
 	"main.h"
 	"tabSearch.h"
 
@@ -33,36 +33,39 @@
 1584438032 d:\gitdiwa\diwaripper\crc32.h
 	"main.h"
 
-1586093911 source:d:\gitdiwa\diwaripper\showdat.cpp
+1588930417 source:d:\gitdiwa\diwaripper\showdat.cpp
 	"main.h"
 	"showDat.h"
+	"tabSearch.h"
 	"getDat.h"
 	"showTra.h"
 	"showSam.h"
 	"MultAndDrum.h"
 	"RomToRom.h"
 	"romSwap.h"
+	"romtoAsm.h"
 
-1584588555 d:\gitdiwa\diwaripper\showdat.h
+1587100755 d:\gitdiwa\diwaripper\showdat.h
+	<vector>
 
-1584775003 d:\gitdiwa\diwaripper\getdat.h
+1589431002 d:\gitdiwa\diwaripper\getdat.h
 
-1585624720 source:d:\gitdiwa\diwaripper\getdat.cpp
+1591069386 source:d:\gitdiwa\diwaripper\getdat.cpp
 	"main.h"
 	"showDat.h"
 	"getDat.h"
 
 1584714771 d:\gitdiwa\diwaripper\showtra.h
 
-1584858615 source:d:\gitdiwa\diwaripper\showtra.cpp
+1586951544 source:d:\gitdiwa\diwaripper\showtra.cpp
 	"main.h"
 	"showDat.h"
 	"getDat.h"
 	"showTra.h"
 
-1585753068 d:\gitdiwa\diwaripper\showsam.h
+1589169030 d:\gitdiwa\diwaripper\showsam.h
 
-1585583537 source:d:\gitdiwa\diwaripper\showsam.cpp
+1589471519 source:d:\gitdiwa\diwaripper\showsam.cpp
 	"main.h"
 	"showDat.h"
 	"getDat.h"
@@ -89,17 +92,17 @@
 
 1585307656 d:\gitdiwa\diwaripper\playsample.h
 
-1586090162 source:d:\gitdiwa\diwaripper\playsample.cpp
+1586442805 source:d:\gitdiwa\diwaripper\playsample.cpp
 	<stdio.h>
 	<cstdint>
 	"main.h"
 	"playSample.h"
 
-1586081179 d:\gitdiwa\diwaripper\romtorom.h
+1589104616 d:\gitdiwa\diwaripper\romtorom.h
 	<cstdint>
 	<vector>
 
-1586088435 source:d:\gitdiwa\diwaripper\romtorom.cpp
+1589456764 source:d:\gitdiwa\diwaripper\romtorom.cpp
 	"main.h"
 	"RomToRom.h"
 	"subTabSrh.h"
@@ -108,13 +111,15 @@
 	"importOft.h"
 	"copyDatSize.h"
 	"writeToRom.h"
+	"tabSearch.h"
+	"showDat.h"
 	<cstdint>
 	<vector>
 	<io.h>
 
 1585537613 d:\gitdiwa\diwaripper\subtabsrh.h
 
-1585564590 source:d:\gitdiwa\diwaripper\subtabsrh.cpp
+1587102641 source:d:\gitdiwa\diwaripper\subtabsrh.cpp
 	"main.h"
 	"tabSearch.h"
 	"subTabSrh.h"
@@ -123,14 +128,14 @@
 1585624720 d:\gitdiwa\diwaripper\subtrackinfoget.h
 	<cstdint>
 
-1585708758 source:d:\gitdiwa\diwaripper\subtrackinfoget.cpp
+1586940518 source:d:\gitdiwa\diwaripper\subtrackinfoget.cpp
 	"main.h"
 	"RomToRom.h"
 	"subTrackInfoGet.h"
 	<string>
 	<cstdint>
 
-1586086518 source:d:\gitdiwa\diwaripper\copydatsize.cpp
+1591068015 source:d:\gitdiwa\diwaripper\copydatsize.cpp
 	"main.h"
 	"getDat.h"
 	"subTrackInfoGet.h"
@@ -141,38 +146,50 @@
 	<vector>
 	<cstdint>
 
-1586080743 d:\gitdiwa\diwaripper\copydatsize.h
+1586940723 d:\gitdiwa\diwaripper\copydatsize.h
 	<vector>
 	<cstdint>
 
 1585906261 d:\gitdiwa\diwaripper\importoft.h
 	<cstdint>
 
-1586007652 source:d:\gitdiwa\diwaripper\importoft.cpp
+1586846238 source:d:\gitdiwa\diwaripper\importoft.cpp
 	"main.h"
 	"RomToRom.h"
 	"importOft.h"
 	"copyDatSize.h"
 
-1586092220 source:d:\gitdiwa\diwaripper\writetorom.cpp
+1589448663 source:d:\gitdiwa\diwaripper\writetorom.cpp
 	"RomToRom.h"
 	"writeToRom.h"
 	"main.h"
 	"copyDatSize.h"
 	"showSam.h"
+	"getDat.h"
+	"showDat.h"
 	<vector>
 
 1586017156 d:\gitdiwa\diwaripper\writetorom.h
 	<cstdint>
 
-1586094470 source:d:\gitdiwa\diwaripper\romtoasm.cpp
+1590025527 source:d:\gitdiwa\diwaripper\romtoasm.cpp
 	"main.h"
+	"tabSearch.h"
 	"getDat.h"
 	"subTrackInfoGet.h"
 	"subTabSrh.h"
 	"showSam.h"
 	"copyDatSize.h"
 	"RomToRom.h"
+	<cstring>
+	<algorithm>
 
 1586093835 d:\gitdiwa\diwaripper\romswap.h
+
+1586095211 source:d:\gitdiwa\diwaripper\romswap.cpp
+	"main.h"
+	"romSwap.h"
+	"tabSearch.h"
+
+1588999383 d:\gitdiwa\diwaripper\romtoasm.h
 
